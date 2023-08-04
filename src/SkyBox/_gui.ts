@@ -26,6 +26,13 @@ export const setGui = (
 
   let initGuiParams = Object.assign({}, guiParams);
   reviseGui(skyBox, initGuiParams);
+  console.log("guiParams", guiParams);
+  if (guiParams?.sourcesType && guiParams?.sourcesType !== "default") {
+    let sourcesInfo = guiParams.sourcesList.find(
+      (sourcesItem) => sourcesItem.name === guiParams.sourcesType
+    );
+    skyBox.setSources(sourcesInfo.sources);
+  }
   let downloadGuiParams = Object.assign({}, guiParams);
 
   setGuiCheckbox(skyBox_folder, guiParams, "show", "show", () => {

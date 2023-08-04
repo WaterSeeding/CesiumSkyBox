@@ -20,7 +20,7 @@ const skyBox = new SkyBox(
   gui,
   {
     show: true,
-    sourcesType: "default",
+    sourcesType: "daytime",
     sourcesList: [
       {
         name: "daytime",
