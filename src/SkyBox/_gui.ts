@@ -1,11 +1,12 @@
 import * as Cesium from "cesium";
 import * as dat from "dat.gui";
+import SkyBox from "./index";
 import { SkyBoxParamsInterface } from "./index";
 import { setGuiCheckbox } from "./utils/setGuiCheckbox";
 import { downloadJson } from "./utils/downloadJson";
 
-const reviseGui = (skyBox: Cesium.SkyBox, guiParams: SkyBoxParamsInterface) => {
-  skyBox.show = guiParams.show;
+const reviseGui = (skyBox: SkyBox, guiParams: SkyBoxParamsInterface) => {
+  skyBox.setShow(guiParams.show);
 };
 
 const storeGui = (guiParams: SkyBoxParamsInterface, storeCb: Function) => {
@@ -17,7 +18,7 @@ const storeGui = (guiParams: SkyBoxParamsInterface, storeCb: Function) => {
 export const setGui = (
   gui: dat.GUI,
   guiParams: SkyBoxParamsInterface,
-  skyBox: Cesium.SkyBox,
+  skyBox: SkyBox,
   storeCb: Function
 ) => {
   let skyBox_folder = gui.addFolder("skyBox");
@@ -29,6 +30,16 @@ export const setGui = (
 
   setGuiCheckbox(skyBox_folder, guiParams, "show", "show", () => {
     reviseGui(skyBox, guiParams);
+  });
+
+  let sourcesListName = guiParams.sourcesList.map(
+    (sourcesItem) => sourcesItem.name
+  );
+  skyBox_folder.add(guiParams, "sourcesType", sourcesListName).onChange((v) => {
+    let sourcesInfo = guiParams.sourcesList.find(
+      (sourcesItem) => sourcesItem.name === v
+    );
+    skyBox.setSources(sourcesInfo.sources);
   });
 
   let obj = {

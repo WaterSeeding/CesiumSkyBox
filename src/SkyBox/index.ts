@@ -4,8 +4,17 @@ import { skyBoxTable } from "./_db";
 import { setParams } from "./_params";
 import { setGui } from "./_gui";
 
+type SourcesType = {
+  name: string;
+  sources: {
+    [key: string]: string;
+  };
+};
+
 export interface SkyBoxParamsInterface {
   show: boolean;
+  sourcesType: string;
+  sourcesList?: SourcesType[];
 }
 
 export default class SkyBox {
@@ -30,11 +39,20 @@ export default class SkyBox {
   ) {
     setParams(this.skyBox, skyBoxTable).then(
       (storeCameraParams: SkyBoxParamsInterface) => {
-        this.skyBoxParams = skyBoxParams || storeCameraParams;
+        if (skyBoxParams?.sourcesList) {
+          skyBoxParams.sourcesList = [
+            ...storeCameraParams.sourcesList,
+            ...skyBoxParams.sourcesList,
+          ];
+          this.skyBoxParams = skyBoxParams;
+        } else {
+          this.skyBoxParams = storeCameraParams;
+        }
+
         let skyBoxGui = setGui(
           gui,
           this.skyBoxParams,
-          this.skyBox,
+          this,
           (data: SkyBoxParamsInterface) => {
             skyBoxTable.add(data);
           }
@@ -46,24 +64,18 @@ export default class SkyBox {
     );
   }
 
-  setSources({
-    positiveX,
-    negativeX,
-    positiveY,
-    negativeY,
-    positiveZ,
-    negativeZ,
-  }: {
-    [key: string]: string;
-  }) {
-    this.skyBox.sources = {
-      positiveX,
-      negativeX,
-      positiveY,
-      negativeY,
-      positiveZ,
-      negativeZ,
-    };
-    this.skyBox.update();
+  setShow(value: boolean) {
+    this.skyBox.show = value;
+  }
+
+  setSources(sources: { [key: string]: string }) {
+    if (!this.skyBox.isDestroyed()) {
+      this.skyBox.destroy();
+    }
+    let skyBox = new Cesium.SkyBox({
+      sources: sources,
+    });
+    this.viewer.scene.skyBox = skyBox;
+    this.skyBox = skyBox;
   }
 }

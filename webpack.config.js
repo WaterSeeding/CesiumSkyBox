@@ -35,6 +35,16 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            esModule: false, // file-loader 默认使用 ES6 模块解析，将其关闭，启用 CommonJS 模块，不配置这个，html 文件中的图片路径不对
+            name: "img/[name]_[hash:6].[ext]",
+          },
+        },
+      },
     ],
   },
   devServer: {

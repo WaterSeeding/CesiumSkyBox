@@ -15,15 +15,50 @@ gui.domElement.id = "gui";
 gui.show();
 
 const scene = new Scene(viewer, gui);
-const skyBox = new SkyBox(viewer, gui);
-// skyBox.setSources({
-//   positiveX: "",
-//   negativeX: "",
-//   positiveY: "",
-//   negativeY: "",
-//   positiveZ: "",
-//   negativeZ: "",
-// });
+const skyBox = new SkyBox(
+  viewer,
+  gui,
+  {
+    show: true,
+    sourcesType: "default",
+    sourcesList: [
+      {
+        name: "daytime",
+        sources: {
+          positiveX: "./static/skybox/daytime/px.jpg",
+          positiveY: "./static/skybox/daytime/ny.jpg",
+          positiveZ: "./static/skybox/daytime/pz.jpg",
+          negativeX: "./static/skybox/daytime/nx.jpg",
+          negativeY: "./static/skybox/daytime/py.jpg",
+          negativeZ: "./static/skybox/daytime/nz.jpg",
+        },
+      },
+      {
+        name: "night",
+        sources: {
+          positiveX: "./static/skybox/night/px.jpg",
+          negativeX: "./static/skybox/night/nx.jpg",
+          positiveY: "./static/skybox/night/ny.jpg",
+          negativeY: "./static/skybox/night/py.jpg",
+          positiveZ: "./static/skybox/night/pz.jpg",
+          negativeZ: "./static/skybox/night/nz.jpg",
+        },
+      },
+      {
+        name: "test",
+        sources: {
+          positiveX: "./static/skybox/test/px.jpg",
+          negativeX: "./static/skybox/test/nx.jpg",
+          positiveY: "./static/skybox/test/ny.jpg",
+          negativeY: "./static/skybox/test/py.jpg",
+          positiveZ: "./static/skybox/test/pz.jpg",
+          negativeZ: "./static/skybox/test/nz.jpg",
+        },
+      },
+    ],
+  },
+  false
+);
 const camera = new Camera(
   viewer,
   gui,
