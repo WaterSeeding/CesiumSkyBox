@@ -20,7 +20,7 @@ const skyBox = new SkyBox(
   gui,
   {
     show: true,
-    sourcesType: "daytime",
+    sourcesType: "default",
     sourcesList: [
       {
         name: "daytime",
@@ -43,18 +43,7 @@ const skyBox = new SkyBox(
           positiveZ: "./static/skybox/night/pz.jpg",
           negativeZ: "./static/skybox/night/nz.jpg",
         },
-      },
-      {
-        name: "test",
-        sources: {
-          positiveX: "./static/skybox/test/px.jpg",
-          negativeX: "./static/skybox/test/nx.jpg",
-          positiveY: "./static/skybox/test/ny.jpg",
-          negativeY: "./static/skybox/test/py.jpg",
-          positiveZ: "./static/skybox/test/pz.jpg",
-          negativeZ: "./static/skybox/test/nz.jpg",
-        },
-      },
+      }
     ],
   },
   false
@@ -64,9 +53,9 @@ const camera = new Camera(
   gui,
   {
     position: {
-      height: 27067269,
-      longitude: 96.337443,
-      latitude: 31.767829,
+      height: 37067269,
+      longitude: 90,
+      latitude: -90,
     },
     headingPitchRoll: {
       heading: 0,
