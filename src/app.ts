@@ -14,6 +14,24 @@ const gui = new dat.GUI({
 gui.domElement.id = "gui";
 gui.show();
 
+const camera = new Camera(
+  viewer,
+  gui,
+  {
+    position: {
+      height: 37067269,
+      longitude: 90,
+      latitude: -90,
+    },
+    headingPitchRoll: {
+      heading: 0,
+      pitch: -90,
+      roll: 0,
+    },
+  },
+  true
+);
+
 const scene = new Scene(viewer, gui);
 const skyBox = new SkyBox(
   viewer,
@@ -43,25 +61,8 @@ const skyBox = new SkyBox(
           positiveZ: "./static/skybox/night/pz.jpg",
           negativeZ: "./static/skybox/night/nz.jpg",
         },
-      }
+      },
     ],
   },
   false
-);
-const camera = new Camera(
-  viewer,
-  gui,
-  {
-    position: {
-      height: 37067269,
-      longitude: 90,
-      latitude: -90,
-    },
-    headingPitchRoll: {
-      heading: 0,
-      pitch: -90,
-      roll: 0,
-    },
-  },
-  true
 );

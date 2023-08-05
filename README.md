@@ -1,125 +1,131 @@
-# 1.1 Camera
+# 1.1 SkyBox
 
 > - [国内查看地址](https://main--sweet-dasik-754a3a.netlify.app/)
 > - [国外查看地址](https://cesium-camera.vercel.app/)
+> - [Github仓库地址](https://github.com/WaterSeeding/CesiumScene)
 
 ## 作用
 
-`Camera`提供了一种通过 GUI 界面控件操作的形式，用于在 Cesium 场景中控制、记录当前相机信息。
+`SkyBox`提供了一种通过 GUI 界面控件操作的形式，用于更新设置场景`SkyBox`的天空盒图片。
 
-它允许你传入初始化参数设置相机信息，若是没有，也能通过之前操作记录在浏览器 IndexDB 的参数来初始化设置相机信息。
+它允许你传入初始化参数设置 SkyBox 显示和图片类型。
 
 ## 示例
 
-以下展示`Camera`组件用法，使用者可以通过 GUI 界面控制操作的形式，修改参数信息，来达到场景镜头的变化。
+以下展示`SkyBox`组件用法，使用者可以通过 GUI 界面控制操作的形式，修改参数信息，来达到场景镜头的变化。
 
 ```jsx
-import React, { useRef, useEffect, type FC } from 'react';
-import * as Cesium from 'cesium';
-import { Camera } from './Camera';
-import * as dat from 'dat.gui';
-import './index.less';
+import "./app.css";
+import * as dat from "dat.gui";
+import { viewer } from "./main";
+import Scene from "./Scene/index";
+import SkyBox from "./SkyBox/index";
+import Camera from "./Camera/index";
 
-export default () => {
-  const cesiumRef = useRef(null);
+const gui = new dat.GUI({
+  name: "Cesium GUI",
+  width: 450,
+  autoPlace: true,
+  closed: false,
+});
+gui.domElement.id = "gui";
+gui.show();
 
-  useEffect(() => {
-    const gui = new dat.GUI({
-      name: 'Cesium GUI',
-      width: 450,
-      autoPlace: true,
-      closed: false,
-    });
-    gui.domElement.id = 'gui';
-    gui.domElement.style = 'position:absolute;top:10px;left:10px;';
-    gui.show();
-    cesiumRef.current.appendChild(gui.domElement);
+const camera = new Camera(
+  viewer,
+  gui,
+  {
+    position: {
+      height: 37067269,
+      longitude: 90,
+      latitude: -90,
+    },
+    headingPitchRoll: {
+      heading: 0,
+      pitch: -90,
+      roll: 0,
+    },
+  },
+  true
+);
 
-    const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrain: Cesium.Terrain.fromWorldTerrain(),
-    });
-
-    const camera = new Camera(
-      viewer,
-      gui,
+const scene = new Scene(viewer, gui);
+const skyBox = new SkyBox(
+  viewer,
+  gui,
+  {
+    show: true,
+    sourcesType: "default",
+    sourcesList: [
       {
-        position: {
-          height: 55871,
-          longitude: 113.976006,
-          latitude: 22.475603,
-        },
-        headingPitchRoll: {
-          heading: 360,
-          pitch: -89.897722,
-          roll: 0,
+        name: "daytime",
+        sources: {
+          positiveX: "./static/skybox/daytime/px.jpg",
+          positiveY: "./static/skybox/daytime/ny.jpg",
+          positiveZ: "./static/skybox/daytime/pz.jpg",
+          negativeX: "./static/skybox/daytime/nx.jpg",
+          negativeY: "./static/skybox/daytime/py.jpg",
+          negativeZ: "./static/skybox/daytime/nz.jpg",
         },
       },
-      false,
-    );
-  }, []);
-  return (
-    <div ref={cesiumRef} className={'cameraContainer'}>
-      <div id="cesiumContainer"></div>
-    </div>
-  );
-};
+      {
+        name: "night",
+        sources: {
+          positiveX: "./static/skybox/night/px.jpg",
+          negativeX: "./static/skybox/night/nx.jpg",
+          positiveY: "./static/skybox/night/ny.jpg",
+          negativeY: "./static/skybox/night/py.jpg",
+          positiveZ: "./static/skybox/night/pz.jpg",
+          negativeZ: "./static/skybox/night/nz.jpg",
+        },
+      },
+    ],
+  },
+  false
+);
 ```
 
 ## API
 
-### `new Camera(viewer: Cesium.Viewer, gui: dat.GUI, cameraParams?: CameraParamsInterface, hideGui?: boolean)`
+### `new SkyBox(viewer: Cesium.Viewer, gui: dat.GUI, skyBoxParams?: SkyBoxParamsInterface, hideGui?: boolean)`
 
-创建一个`Camera`对象。
+创建一个`SkyBox`对象。
 
-| 参数         | 类型                  | 描述                                                                                                                                            |
-| ------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| viewer       | Cesium.Viewer         | Cesium.Viewer 对象                                                                                                                              |
-| gui          | dat.GUI               | dat.GUI 对象                                                                                                                                    |
-| cameraParams | CameraParamsInterface | （可选）相机镜头参数接口，包括: <br> • direction: 相机镜头朝向。 <br> • position: 相机镜头位置。<br> • headingPitchRoll: 相机镜头方位倾斜旋转。 |
-| hideGui      | boolean               | （可选）控制相机的 GUI 界面控件显示隐藏                                                                                                         |
+| 参数         | 类型                  | 描述                                    |
+| ------------ | --------------------- | --------------------------------------- |
+| viewer       | Cesium.Viewer         | Cesium.Viewer 对象                      |
+| gui          | dat.GUI               | dat.GUI 对象                            |
+| skyBoxParams | SkyBoxParamsInterface | （可选）相机镜头参数接口                |
+| hideGui      | boolean               | （可选）控制相机的 GUI 界面控件显示隐藏 |
 
-### `setView(cameraParams: CameraParamsInterface)`
+### `setShow(value: boolean)`
 
-添加`Camera`对象指定位置镜头事件。
+控制`SkyBox`天空盒显示和隐藏。
 
-| 参数         | 类型                  | 描述                                                                                                   |
-| ------------ | --------------------- | ------------------------------------------------------------------------------------------------------ |
-| cameraParams | CameraParamsInterface | 相机镜头参数接口，包括: <br> • position: 相机镜头位置。<br> • headingPitchRoll: 相机镜头方位倾斜旋转。 |
+### `setSources(sources: { [key: string]: string })`
 
-### `setFly(cameraParams: CameraParamsInterface, completeCb: () => void)`
-
-添加`Camera`对象指定位置飞行事件。
-
-| 参数         | 类型                  | 描述                                                                                                   |
-| ------------ | --------------------- | ------------------------------------------------------------------------------------------------------ |
-| cameraParams | CameraParamsInterface | 相机镜头参数接口，包括: <br> • position: 相机镜头位置。<br> • headingPitchRoll: 相机镜头方位倾斜旋转。 |
-| completeCb   | Function              | 当事件发生结束时要调用的回调函数。                                                                     |
-
-### `setFlyBoundingSphere(boundingSphere: Cesium.BoundingSphere, cameraParams: CameraParamsInterface, completeCb: () => void)`
-
-添加`Camera`对象指定目标（BoundingSphere）飞行事件。
-
-| 参数           | 类型                  | 描述                                                                    |
-| -------------- | --------------------- | ----------------------------------------------------------------------- |
-| boundingSphere | Cesium.BoundingSphere | Cesium.BoundingSphere 对象，相机目标。                                  |
-| cameraParams   | CameraParamsInterface | 相机镜头参数接口，包括: <br> • headingPitchRoll: 相机镜头方位倾斜旋转。 |
-| completeCb     | Function              | 当事件发生结束时要调用的回调函数。                                      |
-
-### `getInfo()： void`
-
-获取当前`Camera`镜头信息。
+更新`SkyBox`天空盒图片内容。
 
 ## 类型
 
-### `CameraParamsInterface`
+### `SkyBoxParamsInterface`
 
-场景相机镜头参数。
+场景`SkyBox`天空盒信息。
 
-| 参数             | 类型   | 描述                                                                                     |
-| ---------------- | ------ | ---------------------------------------------------------------------------------------- |
-| direction        | Object | 相机镜头朝向，包括: <br> • longitude: 经度。<br> • latitude: 纬度。<br> • height: 高度。 |
-| position         | Object | 相机镜头位置，包括: <br> • longitude: 经度。<br> • latitude: 纬度。<br> • height: 高度。 |
-| headingPitchRoll | Object | 相机镜朝向倾斜旋转， 包括: <br> • heading: 朝向。<br> • pitch: 倾斜。<br> • roll: 旋转。 |
+| 参数        | 类型          | 描述                 |
+| ----------- | ------------- | -------------------- |
+| show        | boolean       | 控制天空盒显示和隐藏 |
+| sourcesType | string        | 设置天空盒类型       |
+| sourcesList | SourcesType[] | 天空盒数据           |
+
+### `SourcesType`
+
+场景`SkyBox`天空盒图片。
+
+| 参数    | 类型   | 描述       |
+| ------- | ------ | ---------- |
+| name    | string | 天空盒名称 |
+| sources | any    | 天空盒图片 |
 
 ## 相关资料
 
