@@ -16,20 +16,20 @@ gui.show();
 
 const camera = new Camera(
   viewer,
-  gui,
-  {
-    position: {
-      height: 37067269,
-      longitude: 90,
-      latitude: -90,
-    },
-    headingPitchRoll: {
-      heading: 0,
-      pitch: -90,
-      roll: 0,
-    },
-  },
-  true
+  gui
+  // {
+  //   position: {
+  //     height: 37067269,
+  //     longitude: 90,
+  //     latitude: -90,
+  //   },
+  //   headingPitchRoll: {
+  //     heading: 0,
+  //     pitch: -90,
+  //     roll: 0,
+  //   },
+  // },
+  // true
 );
 
 const scene = new Scene(viewer, gui);
@@ -40,6 +40,17 @@ const skyBox = new SkyBox(
     show: true,
     sourcesType: "default",
     sourcesList: [
+      {
+        name: "day",
+        sources: {
+          negativeX: "./static/skybox/day/left.png",
+          positiveX: "./static/skybox/day/right.png",
+          negativeY: "./static/skybox/day/front.png",
+          positiveY: "./static/skybox/day/back.png",
+          negativeZ: "./static/skybox/day/down.png",
+          positiveZ: "./static/skybox/day/up.png",
+        },
+      },
       {
         name: "daytime",
         sources: {
