@@ -31,24 +31,7 @@ const gui = new dat.GUI({
 gui.domElement.id = "gui";
 gui.show();
 
-const camera = new Camera(
-  viewer,
-  gui,
-  {
-    position: {
-      height: 37067269,
-      longitude: 90,
-      latitude: -90,
-    },
-    headingPitchRoll: {
-      heading: 0,
-      pitch: -90,
-      roll: 0,
-    },
-  },
-  true
-);
-
+const camera = new Camera(viewer, gui);
 const scene = new Scene(viewer, gui);
 const skyBox = new SkyBox(
   viewer,
@@ -58,25 +41,36 @@ const skyBox = new SkyBox(
     sourcesType: "default",
     sourcesList: [
       {
-        name: "daytime",
+        name: "star1",
         sources: {
-          positiveX: "./static/skybox/daytime/px.jpg",
-          positiveY: "./static/skybox/daytime/ny.jpg",
-          positiveZ: "./static/skybox/daytime/pz.jpg",
-          negativeX: "./static/skybox/daytime/nx.jpg",
-          negativeY: "./static/skybox/daytime/py.jpg",
-          negativeZ: "./static/skybox/daytime/nz.jpg",
+          positiveX: "./static/skybox/stars/00h+00.jpg",
+          negativeX: "./static/skybox/stars/12h+00.jpg",
+          positiveY: "./static/skybox/stars/06h+00.jpg",
+          negativeY: "./static/skybox/stars/18h+00.jpg",
+          positiveZ: "./static/skybox/stars/06h+90.jpg",
+          negativeZ: "./static/skybox/stars/06h-90.jpg",
         },
       },
       {
-        name: "night",
+        name: "star2",
         sources: {
-          positiveX: "./static/skybox/night/px.jpg",
-          negativeX: "./static/skybox/night/nx.jpg",
-          positiveY: "./static/skybox/night/ny.jpg",
-          negativeY: "./static/skybox/night/py.jpg",
-          positiveZ: "./static/skybox/night/pz.jpg",
-          negativeZ: "./static/skybox/night/nz.jpg",
+          positiveX: "./static/skybox/stars/Version2_dark_px.jpg",
+          negativeX: "./static/skybox/stars/Version2_dark_mx.jpg",
+          positiveY: "./static/skybox/stars/Version2_dark_py.jpg",
+          negativeY: "./static/skybox/stars/Version2_dark_my.jpg",
+          positiveZ: "./static/skybox/stars/Version2_dark_pz.jpg",
+          negativeZ: "./static/skybox/stars/Version2_dark_mz.jpg",
+        },
+      },
+      {
+        name: "star3",
+        sources: {
+          positiveX: "./static/skybox/stars/tycho2t3_80_pxs.jpg",
+          negativeX: "./static/skybox/stars/tycho2t3_80_mxs.jpg",
+          positiveY: "./static/skybox/stars/tycho2t3_80_pys.jpg",
+          negativeY: "./static/skybox/stars/tycho2t3_80_mys.jpg",
+          positiveZ: "./static/skybox/stars/tycho2t3_80_pzs.jpg",
+          negativeZ: "./static/skybox/stars/tycho2t3_80_mzs.jpg",
         },
       },
     ],
